@@ -1,0 +1,15 @@
+services:
+  localstack:
+    container_name: localstack-lab2
+    image: localstack/localstack:latest
+    ports:
+      - "127.0.0.1:4566:4566"            # tylko lokalnie
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      - SERVICES=s3,lambda,iam,logs,sts
+      - DEBUG=0
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"   # Lambda uruchamiana w kontenerach Dockera
+      - "./volume:/var/lib/localstack"

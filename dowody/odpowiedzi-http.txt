@@ -1,0 +1,214 @@
+$ curl -s http://raport-koszykow-www.s3-website.localhost.localstack.cloud:4566/
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <title>Raport koszyków</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main>
+    <h1>Raport koszyków</h1>
+    <p>Strona statyczna udostępniona z bucketu S3 w LocalStack.</p>
+    <p class="info">Wersja pierwsza raportu – dane z poniedziałku.</p>
+  </main>
+</body>
+</html>
+
+
+$ lstk aws s3 cp www/index.html s3://raport-koszykow-www/index.html --content-type text/html; charset=utf-8
+> Note: No AWS profile found, run 'lstk setup aws'
+Completed 376 Bytes/376 Bytes (38.0 KiB/s) with 1 file(s) remainingupload: www/index.html to s3://raport-koszykow-www/index.html      
+
+
+$ curl -si http://raport-koszykow-www.s3-website.localhost.localstack.cloud:4566/
+HTTP/1.1 200 OK
+Server: TwistedWeb/26.4.0
+Date: Tue, 10 Nov 2026 15:55:20 GMT
+Content-Type: text/html; charset=utf-8
+etag: "7cf5b2e61f2ca5174177fa471b0a32ce"
+x-localstack: 2026.10.6
+Transfer-Encoding: chunked
+
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <title>Raport koszyków</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main>
+    <h1>Raport koszyków</h1>
+    <p>Strona statyczna udostępniona z bucketu S3 w LocalStack.</p>
+    <p class="info">Wersja poprawiona raportu – dane zaktualizowane we wtorek.</p>
+  </main>
+</body>
+</html>
+
+
+$ curl -si http://madymoe824fpfsy9u2e7jodsjtdj2vj2.lambda-url.us-east-1.localhost.localstack.cloud:4566/?imie=Ola
+HTTP/1.1 200 OK
+Server: TwistedWeb/26.4.0
+Date: Tue, 10 Nov 2026 15:55:20 GMT
+Content-Type: text/html; charset=utf-8
+Connection: keep-alive
+x-amzn-requestid: 77aab2f1-99d5-4afe-af4b-b2f6921fed0c
+x-amzn-trace-id: c85c30fc-f626-4da3-82f9-15e5152ac5b6
+Content-Length: 505
+x-localstack: 2026.10.6
+
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <title>Raport koszyków</title>
+  <style>
+    body { background: #1e3a5f; font-family: Arial, sans-serif; margin: 0; }
+    main { max-width: 640px; margin: 60px auto; background: #ffd23f; padding: 32px; border-radius: 16px; border: 6px dashed #e63946; }
+    h1 { color: #e63946; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Raport dla Ola</h1>
+    <p>Strona generowana przez funkcję Lambda z szablonu w S3.</p>
+  </main>
+</body>
+</html>
+
+
+$ curl -si http://madymoe824fpfsy9u2e7jodsjtdj2vj2.lambda-url.us-east-1.localhost.localstack.cloud:4566/?imie=Jan
+HTTP/1.1 200 OK
+Server: TwistedWeb/26.4.0
+Date: Tue, 10 Nov 2026 15:55:20 GMT
+Content-Type: text/html; charset=utf-8
+Connection: keep-alive
+x-amzn-requestid: 8ace8436-4ec3-45e3-af71-8ba9a88829f0
+x-amzn-trace-id: b265678c-3694-4203-9e64-f52289d978ec
+Content-Length: 505
+x-localstack: 2026.10.6
+
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <title>Raport koszyków</title>
+  <style>
+    body { background: #1e3a5f; font-family: Arial, sans-serif; margin: 0; }
+    main { max-width: 640px; margin: 60px auto; background: #ffd23f; padding: 32px; border-radius: 16px; border: 6px dashed #e63946; }
+    h1 { color: #e63946; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Raport dla Jan</h1>
+    <p>Strona generowana przez funkcję Lambda z szablonu w S3.</p>
+  </main>
+</body>
+</html>
+
+
+$ curl -si http://madymoe824fpfsy9u2e7jodsjtdj2vj2.lambda-url.us-east-1.localhost.localstack.cloud:4566/
+HTTP/1.1 400 BAD REQUEST
+Server: TwistedWeb/26.4.0
+Date: Tue, 10 Nov 2026 15:55:20 GMT
+Content-Type: text/plain; charset=utf-8
+Connection: keep-alive
+x-amzn-requestid: 2a75935c-ac8c-4052-863c-b5a279b4d40c
+x-amzn-trace-id: 53004143-680d-4acd-82dc-ce1cfa6745ba
+Content-Length: 40
+x-localstack: 2026.10.6
+
+Brak parametru imie. Użyj np. ?imie=Ola
+
+$ curl -si http://madymoe824fpfsy9u2e7jodsjtdj2vj2.lambda-url.us-east-1.localhost.localstack.cloud:4566/?imie=
+HTTP/1.1 400 BAD REQUEST
+Server: TwistedWeb/26.4.0
+Date: Tue, 10 Nov 2026 15:55:20 GMT
+Content-Type: text/plain; charset=utf-8
+Connection: keep-alive
+x-amzn-requestid: 241aa37b-5728-4477-8207-af12804809f3
+x-amzn-trace-id: 4af774e8-399e-462b-b064-1c2d26b004f1
+Content-Length: 40
+x-localstack: 2026.10.6
+
+Brak parametru imie. Użyj np. ?imie=Ola
+
+$ curl -s http://madymoe824fpfsy9u2e7jodsjtdj2vj2.lambda-url.us-east-1.localhost.localstack.cloud:4566/?imie=%3Cscript%3Ealert(1)%3C%2Fscript%3E
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <title>Raport koszyków</title>
+  <style>
+    body { background: #1e3a5f; font-family: Arial, sans-serif; margin: 0; }
+    main { max-width: 640px; margin: 60px auto; background: #ffd23f; padding: 32px; border-radius: 16px; border: 6px dashed #e63946; }
+    h1 { color: #e63946; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Raport dla &lt;script&gt;alert(1)&lt;/script&gt;</h1>
+    <p>Strona generowana przez funkcję Lambda z szablonu w S3.</p>
+  </main>
+</body>
+</html>
+
+
+$ lstk aws s3 cp template.html s3://raport-koszykow-szablony/template.html --content-type text/html; charset=utf-8
+> Note: No AWS profile found, run 'lstk setup aws'
+Completed 595 Bytes/595 Bytes (57.9 KiB/s) with 1 file(s) remainingupload: ./template.html to s3://raport-koszykow-szablony/template.html
+
+
+$ curl -s http://madymoe824fpfsy9u2e7jodsjtdj2vj2.lambda-url.us-east-1.localhost.localstack.cloud:4566/?imie=Ola
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <title>Raport koszyków</title>
+  <style>
+    body { background: #1e3a5f; font-family: Arial, sans-serif; margin: 0; }
+    main { max-width: 640px; margin: 60px auto; background: #ffd23f; padding: 32px; border-radius: 16px; border: 6px dashed #e63946; }
+    h1 { color: #e63946; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Raport dla Ola</h1>
+    <p>Strona generowana przez funkcję Lambda z szablonu w S3.</p>
+    <p>Zdanie dodane później do szablonu – bez ponownego wdrażania funkcji.</p>
+  </main>
+</body>
+</html>
+
+
+$ lstk aws s3 cp s3://raport-koszykow-szablony/template.html -
+> Note: No AWS profile found, run 'lstk setup aws'
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <title>Raport koszyków</title>
+  <style>
+    body { background: #1e3a5f; font-family: Arial, sans-serif; margin: 0; }
+    main { max-width: 640px; margin: 60px auto; background: #ffd23f; padding: 32px; border-radius: 16px; border: 6px dashed #e63946; }
+    h1 { color: #e63946; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Raport dla {{IMIE}}</h1>
+    <p>Strona generowana przez funkcję Lambda z szablonu w S3.</p>
+    <p>Zdanie dodane później do szablonu – bez ponownego wdrażania funkcji.</p>
+  </main>
+</body>
+</html>
+
+
+$ lstk aws s3api get-bucket-policy --bucket raport-koszykow-szablony
+> Note: No AWS profile found, run 'lstk setup aws'
+
+An error occurred (NoSuchBucketPolicy) when calling the GetBucketPolicy operation: The bucket policy does not exist
+
+

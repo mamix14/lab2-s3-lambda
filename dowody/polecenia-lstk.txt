@@ -1,0 +1,99 @@
+$ docker compose up -d
+
++ WWW=raport-koszykow-www
++ TPL=raport-koszykow-szablony
++ FN=raport-koszykow-lambda
++ lstk status
+Fetching LocalStack status...
+✔︎ LocalStack AWS Emulator is running
+• Endpoint: localhost.localstack.cloud:4566
+• Container: localstack-lab2
+• Version: 2026.10.6
+• Uptime: 9s
+> Note: No resources deployed
++ lstk aws s3 mb s3://raport-koszykow-www
+> Note: No AWS profile found, run 'lstk setup aws'
+make_bucket: raport-koszykow-www
++ lstk aws s3 cp www/index.html s3://raport-koszykow-www/index.html --content-type 'text/html; charset=utf-8'
+> Note: No AWS profile found, run 'lstk setup aws'
+Completed 365 Bytes/365 Bytes (24.4 KiB/s) with 1 file(s) remainingupload: www/index.html to s3://raport-koszykow-www/index.html      
++ lstk aws s3 cp www/style.css s3://raport-koszykow-www/style.css --content-type text/css
+> Note: No AWS profile found, run 'lstk setup aws'
+Completed 283 Bytes/283 Bytes (27.8 KiB/s) with 1 file(s) remainingupload: www/style.css to s3://raport-koszykow-www/style.css        
++ lstk aws s3 website s3://raport-koszykow-www --index-document index.html
+> Note: No AWS profile found, run 'lstk setup aws'
++ lstk aws s3api put-bucket-policy --bucket raport-koszykow-www --policy file://policy.json
+> Note: No AWS profile found, run 'lstk setup aws'
++ lstk aws s3api get-bucket-website --bucket raport-koszykow-www
+> Note: No AWS profile found, run 'lstk setup aws'
+{
+    "IndexDocument": {
+        "Suffix": "index.html"
+    }
+}
++ lstk aws s3 mb s3://raport-koszykow-szablony
+> Note: No AWS profile found, run 'lstk setup aws'
+make_bucket: raport-koszykow-szablony
++ lstk aws s3 cp template.html s3://raport-koszykow-szablony/template.html --content-type 'text/html; charset=utf-8'
+> Note: No AWS profile found, run 'lstk setup aws'
+Completed 510 Bytes/510 Bytes (58.7 KiB/s) with 1 file(s) remainingupload: ./template.html to s3://raport-koszykow-szablony/template.html
++ cd lambda
++ rm -f ../funkcja.zip
++ zip -q ../funkcja.zip lambda_function.py
++ lstk aws lambda create-function --function-name raport-koszykow-lambda --runtime python3.12 --handler lambda_function.handler --zip-file fileb://funkcja.zip --role arn:aws:iam::000000000000:role/lambda-role --environment 'Variables={TEMPLATE_BUCKET=raport-koszykow-szablony,TEMPLATE_KEY=template.html}'
+> Note: No AWS profile found, run 'lstk setup aws'
+{
+    "FunctionName": "raport-koszykow-lambda",
+    "FunctionArn": "arn:aws:lambda:us-east-1:000000000000:function:raport-koszykow-lambda",
+    "Runtime": "python3.12",
+    "Role": "arn:aws:iam::000000000000:role/lambda-role",
+    "Handler": "lambda_function.handler",
+    "CodeSize": 757,
+    "Description": "",
+    "Timeout": 3,
+    "MemorySize": 128,
+    "LastModified": "2026-11-10T15:55:06.590+0000",
+    "CodeSha256": "Op5y6KwbFJ1h5+eBGQp7CEp2qRJsTWAbcOw8VPt2KGQ=",
+    "Version": "$LATEST",
+    "Environment": {
+        "Variables": {
+            "TEMPLATE_BUCKET": "raport-koszykow-szablony",
+            "TEMPLATE_KEY": "template.html"
+        }
+    },
+    "TracingConfig": {
+        "Mode": "PassThrough"
+    },
+    "RevisionId": "27a5f965-a13e-4218-bb4e-b3aae4baaa70",
+    "State": "Pending",
+    "StateReason": "The function is being created.",
+    "StateReasonCode": "Creating",
+    "PackageType": "Zip",
+    "Architectures": [
+        "x86_64"
+    ],
+    "EphemeralStorage": {
+        "Size": 512
+    },
+    "SnapStart": {
+        "ApplyOn": "None",
+        "OptimizationStatus": "Off"
+    },
+    "RuntimeVersionConfig": {
+        "RuntimeVersionArn": "arn:aws:lambda:us-east-1::runtime:8eeff65f6809a3ce81507fe733fe09b835899b99481ba22fd75b5a7338290ec1"
+    },
+    "LoggingConfig": {
+        "LogFormat": "Text",
+        "LogGroup": "/aws/lambda/raport-koszykow-lambda"
+    }
+}
++ lstk aws lambda wait function-active-v2 --function-name raport-koszykow-lambda
+> Note: No AWS profile found, run 'lstk setup aws'
++ lstk aws lambda create-function-url-config --function-name raport-koszykow-lambda --auth-type NONE
+> Note: No AWS profile found, run 'lstk setup aws'
+{
+    "FunctionUrl": "http://madymoe824fpfsy9u2e7jodsjtdj2vj2.lambda-url.us-east-1.localhost.localstack.cloud:4566/",
+    "FunctionArn": "arn:aws:lambda:us-east-1:000000000000:function:raport-koszykow-lambda",
+    "AuthType": "NONE",
+    "CreationTime": "2026-11-10T15:55:08.259+0000"
+}
